@@ -1,0 +1,97 @@
+[
+    {
+        "Command": [
+            "server",
+            "-automigrate=true"
+        ],
+        "Cpu": 512,
+        "EntryPoint": [],
+        "Environment": [
+            {
+                "Name": "AWS_REGION",
+                "Value": "${aws_region}"
+            },
+            {
+                "Name": "EMPIRE_DATABASE_URL",
+                "Value": "postgres://postgres:postgres@postgres/postgres?sslmode=disable"
+            },
+            {
+                "Name": "EMPIRE_ECS_CLUSTER",
+                "Value": "${cluster_name}"
+            },
+            {
+                "Name": "EMPIRE_ELB_VPC_ID",
+                "Value": "${vpc_id}"
+            },
+            {
+                "Name": "EMPIRE_ELB_SG_PRIVATE",
+                "Value": "${sg_private}"
+            },
+            {
+                "Name": "EMPIRE_ELB_SG_PUBLIC",
+                "Value": "${sg_public}"
+            },
+            {
+                "Name": "EMPIRE_ROUTE53_INTERNAL_ZONE_ID",
+                "Value": "${dns_zone_id}"
+            },
+            {
+                "Name": "EMPIRE_EC2_SUBNETS_PRIVATE",
+                "Value": "${subnets_private}"
+            },
+            {
+                "Name": "EMPIRE_ECS_SERVICE_ROLE",
+                "Value": "${service_role}"
+            },
+            {
+                "Name": "EMPIRE_EC2_SUBNETS_PUBLIC",
+                "Value": "${subnets_public}"
+            }
+        ],
+        "Essential": true,
+        "Image": "remind101/empire:master",
+        "Links": [
+            "postgres:postgres"
+        ],
+        "Memory": 256,
+        "MountPoints": [
+            {
+                "ContainerPath": "/var/run/docker.sock",
+                "ReadOnly": false,
+                "SourceVolume": "dockerSocket"
+            },
+            {
+                "ContainerPath": "/root/.docker/config.json",
+                "ReadOnly": false,
+                "SourceVolume": "dockerCfg"
+            }
+        ],
+        "Name": "empire",
+        "PortMappings": [
+            {
+                "ContainerPort": 8080,
+                "HostPort": 8080
+            }
+        ],
+        "VolumesFrom": []
+    },
+    {
+        "Command": [],
+        "Cpu": 512,
+        "EntryPoint": [],
+        "Environment": [],
+        "Essential": "true",
+        "Image": "postgres",
+        "Links": [],
+        "Memory": 256,
+        "MountPoints": [],
+        "Name": "postgres",
+        "PortMappings": [
+            {
+                "ContainerPort": 5432,
+                "HostPort": 5432
+            }
+        ],
+        "VolumesFrom": []
+    }
+]
